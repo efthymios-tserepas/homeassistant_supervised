@@ -10,7 +10,15 @@ The script has been successfully tested on the following systems:
 - Raspberry Pi OS (32-bit and 64-bit)
 
 # Features
-- Execute the script to install the necessary dependencies, Docker, and Home Assistant Supervised.
+- Install the necessary dependencies: The script automates the installation of required packages and libraries to ensure a smooth setup process.
+
+- Docker Installation: The script installs Docker, a platform for developing, shipping, and running applications in containers.
+
+- Home Assistant Supervised: Deploy Home Assistant Supervised in a Docker container, providing a flexible and manageable home automation platform.
+
+- Automatic Troubleshooting: The script checks for potential dependency issues and attempts to fix them automatically, ensuring a robust installation process.
+
+- Cross-Platform Compatibility: Successfully tested on Debian, Ubuntu, and Raspberry Pi OS (32-bit and 64-bit) systems.
 
 ## Important Note
 

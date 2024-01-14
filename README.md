@@ -9,14 +9,16 @@ The script has been successfully tested on the following systems:
 - Ubuntu
 - Raspberry Pi OS (32-bit and 64-bit)
 
+# Features
+- Execute the script to install the necessary dependencies, Docker, and Home Assistant Supervised.
+
 ## Usage
 
-- Ensure that your system meets the requirements mentioned in the script.
-- Execute the script to install the necessary dependencies, Docker, and Home Assistant Supervised.
-- Download and execute the script by running the following command:
+To install Home Assistant Supervised with the default settings, run the following command:
 
 ```bash
 sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh)"
+
 
 ## Important Note
 

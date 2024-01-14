@@ -12,16 +12,15 @@ The script has been successfully tested on the following systems:
 # Features
 - Execute the script to install the necessary dependencies, Docker, and Home Assistant Supervised.
 
+## Important Note
+
+- This script is intended for systems compatible with Home Assistant Supervised and may not work on all environments.
+
+Feel free to contribute, report issues, or suggest improvements. For more information on Home Assistant, visit [Home Assistant Official Website](https://www.home-assistant.io/).
+
 ## Usage
 
 To install Home Assistant Supervised with the default settings, run the following command:
 
 ```bash
 sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh)"
-
-
-## Important Note
-
-- This script is intended for systems compatible with Home Assistant Supervised and may not work on all environments.
-
-Feel free to contribute, report issues, or suggest improvements. For more information on Home Assistant, visit [Home Assistant Official Website](https://www.home-assistant.io/).

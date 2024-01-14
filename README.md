@@ -16,7 +16,7 @@ The script has been successfully tested on the following systems:
 - Download and execute the script by running the following command:
 
 ```bash
-sudo curl -Lo ha.sh https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh && sudo bash ha.sh
+sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh)"
 
 ## Important Note
 

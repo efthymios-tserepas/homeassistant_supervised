@@ -18,8 +18,33 @@ function is_package_installed() {
     dpkg -s "$package_name" 2>/dev/null | grep -q "Status: install ok installed"
 }
 
+# Install systemd-resolved only if not installed
+if ! is_package_installed "systemd-resolved"; then
+    echo -e "\e[1;32mInstalling systemd-resolved...\e[0m"
+    sudo apt install "systemd-resolved" -y
+fi
+
+# Configure systemd-resolved to use Google DNS servers
+echo -e "\e[1;32mConfiguring systemd-resolved to use Google DNS servers...\e[0m"
+echo -e "[Resolve]\nDNS=8.8.8.8 8.8.4.4\n" | sudo tee /etc/systemd/resolved.conf > /dev/null
+
+# Restart systemd-resolved for changes to take effect
+sudo systemctl restart systemd-resolved
+
+# Wait for a few seconds before testing DNS connectivity
+echo -e "\e[1;33mWaiting for systemd-resolved to apply DNS settings...\e[0m"
+sleep 5
+
+# Test DNS connectivity
+if ping -q -c 1 google.com > /dev/null; then
+    echo -e "\e[1;32mDNS test successful. Continuing with the script...\e[0m"
+else
+    echo -e "\e[1;31mDNS test failed. Exiting the script. Please configure the dns.\e[0m"
+    exit 1
+fi
+
 # List of packages to install
-packages=("apparmor" "cifs-utils" "curl" "dbus" "jq" "libglib2.0-bin" "lsb-release" "network-manager" "nfs-common" "systemd-journal-remote" "systemd-resolved" "udisks2" "wget")
+packages=("apparmor" "cifs-utils" "curl" "dbus" "jq" "libglib2.0-bin" "lsb-release" "network-manager" "nfs-common" "udisks2" "wget" "systemd-journal-remote")
 
 # Update package sources
 sudo apt update
@@ -105,6 +130,12 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
     fi
 fi
 
+# Check if the system is Debian 12 (bookworm)
+if [ "$distributor_id" = "Debian" ] && [ "$codename_lower" = "bookworm" ]; then
+    echo -e "\e[1;32mDebian 12 detected. Installing specific Docker version...\e[0m"
+    sudo apt install -y --allow-downgrades docker-ce=5:24.0.7-1~debian.12~bookworm
+fi
+
 # Check if user is already in the Docker group
 if getent group docker | grep &>/dev/null "\b$(logname)\b"; then
     echo -e "\e[1;32mUser $(logname) is already in the Docker group.\e[0m"
@@ -157,35 +188,37 @@ echo -e "\e[1;32mInstalling Home Assistant Supervised...\e[0m"
 sudo BYPASS_OS_CHECK=true dpkg -i --ignore-depends=systemd-resolved ./homeassistant-supervised.deb
 
 # Set the initial delay time
-initial_delay=60
+initial_delay=300  # 5 minutes in seconds
 
-# Countdown loop
-for ((i=$initial_delay; i>=1; i--)); do
-    echo -ne "\e[1;33mWaiting for $i seconds to check the installation of Home Assistant...\e[0m\r"
-    sleep 1
-done
-echo # Προσθέτουμε μια νέα γραμμή μετά τον αντίστροφο μετρητή
-
-# Check if any container with "hassio" in the name is running
-if sudo docker ps --format '{{.Names}}' | grep -q "hassio"; then
-    echo -e "\e[1;32mA Hassio-related container is running.\e[0m"
-else
-    # If no Hassio-related container is running, pull and restart
-    echo -e "\e[1;31mNo Hassio-related container is running. Pulling and restarting...\e[0m"
-    docker pull localhost:5000/homeassistant/${ARCHITECTURE}-hassio-supervisor:latest
-    sudo systemctl restart hassio-supervisor.service
+# Countdown loop with parallel execution of docker check
+while [ $initial_delay -gt 0 ]; do
+    minutes=$(($initial_delay / 60))
+    seconds=$(($initial_delay % 60))
     
-    # Check if the directory exists and recreate it if needed
-    if [ -d "/usr/share/hassio/tmp/homeassistant_pulse" ]; then
-        echo -e "\e[1;32mDirectory /usr/share/hassio/tmp/homeassistant_pulse already exists.\e[0m"
-    else
-        echo -e "\e[1;31mDirectory /usr/share/hassio/tmp/homeassistant_pulse does not exist. Recreating...\e[0m"
-        sudo mkdir -p /usr/share/hassio/tmp/homeassistant_pulse
+    echo -ne "\e[1;33mWaiting for $minutes:$seconds minutes to check the installation of Home Assistant...\e[0m\r"
+    
+    # Check if any container with "hassio" in the name is running
+    if sudo docker ps --format '{{.Names}}' | grep -q "hassio"; then
+        echo -e "\e[1;32mA Hassio-related container is running.\e[0m"
+        break
     fi
     
-    # Restart the Home Assistant Supervisor
-    echo -e "\e[1;31mRestarting Home Assistant Supervisor...\e[0m"
-    sudo docker restart hassio_supervisor
+    sleep 1
+    ((initial_delay--))
+done
+
+# If no Hassio-related container is running, perform system reboot
+if [ $initial_delay -eq 0 ]; then
+    echo -e "\e[1;31mNo Hassio-related container is running. Performing system reboot...\e[0m"
+    sudo reboot
+fi
+
+# Check if the directory exists and recreate it if needed
+if [ -d "/usr/share/hassio/tmp/homeassistant_pulse" ]; then
+    echo -e "\e[1;32mDirectory /usr/share/hassio/tmp/homeassistant_pulse already exists.\e[0m"
+else
+    echo -e "\e[1;31mDirectory /usr/share/hassio/tmp/homeassistant_pulse does not exist. Recreating...\e[0m"
+    sudo mkdir -p /usr/share/hassio/tmp/homeassistant_pulse
 fi
 
 
@@ -196,6 +229,5 @@ rm -f "$PACKAGE_NAME" "./homeassistant-supervised.deb"
 echo -e "\e[1;33mHome Assistant installation completed successfully!\e[0m\n"
 echo -e "\e[1;32mOpen the link: \e[0m\e[1;92mhttp://$(hostname -I | cut -d' ' -f1):8123\e[0m\n"
 echo -e "\e[1;31mIf you see 'This site can’t be reached,' please check again after 5 minutes.\e[0m\n"
-
 
 

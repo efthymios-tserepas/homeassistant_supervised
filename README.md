@@ -26,7 +26,7 @@ The script has been successfully tested on the following systems:
 
 Feel free to contribute, report issues, or suggest improvements. For more information on Home Assistant, visit [Home Assistant Official Website](https://www.home-assistant.io/).
 
-## Usage
+## Install
 
 To install Home Assistant Supervised with the default settings, run the following command:
 

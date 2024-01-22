@@ -14,6 +14,10 @@ The script has been successfully tested on the following systems:
 
 - Docker Installation: The script installs Docker, a platform for developing, shipping, and running applications in containers.
 
+- If is debian 12 install the docker-ce=5:24.0.7-1~debian.12~bookworm because the newest has problem with homeassistant.
+
+- Install systemd-resolved and configure google dns
+
 - Home Assistant Supervised: Deploy Home Assistant Supervised in a Docker container, providing a flexible and manageable home automation platform.
 
 - Automatic Troubleshooting: The script checks for potential dependency issues and attempts to fix them automatically, ensuring a robust installation process.

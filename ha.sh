@@ -118,11 +118,6 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 
         echo -e "\e[1;32mDocker has been installed for $distributor_id.\e[0m"
 
-
-        # Reboot the system
-        echo -e "\e[1;31mRebooting the system to apply changes. Please run the script again for the installation of Home Assistant to complete.\e[0m"
-
-        exec sudo reboot
     else
         # Installation failed
         echo -e "\e[1;31mError: Docker installation failed. Please check the logs for more information.\e[0m"

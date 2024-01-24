@@ -129,6 +129,9 @@ fi
 if [ "$distributor_id" = "Debian" ] && [ "$codename_lower" = "bookworm" ]; then
     echo -e "\e[1;32mDebian 12 detected. Installing specific Docker version...\e[0m"
     sudo apt install -y --allow-downgrades docker-ce=5:24.0.7-1~debian.12~bookworm
+    
+    # Set docker-ce package on hold to prevent upgrades
+    echo "docker-ce hold" | sudo dpkg --set-selections
 fi
 
 # Check if user is already in the Docker group

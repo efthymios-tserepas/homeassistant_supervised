@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Check if Home Assistant Supervised is already installed
-#if [ -d "/usr/share/hassio" ]; then
-#    echo -e "\e[1;31mHome Assistant Supervised is already installed. Exiting script.\e[0m"
-#    exit 0
-#fi
+if [ -d "/usr/share/hassio" ]; then
+    echo -e "\e[1;31mHome Assistant Supervised is already installed. Exiting script.\e[0m"
+    exit 0
+fi
 
 # Check the distributor ID
 distributor_id=$(lsb_release -i -s)

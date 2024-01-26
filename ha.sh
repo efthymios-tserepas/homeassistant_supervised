@@ -1,47 +1,20 @@
 #!/bin/bash
 
 # Check if Home Assistant Supervised is already installed
-if [ -d "/usr/share/hassio" ]; then
-    echo -e "\e[1;31mHome Assistant Supervised is already installed. Exiting script.\e[0m"
-    exit 0
-fi
+#if [ -d "/usr/share/hassio" ]; then
+#    echo -e "\e[1;31mHome Assistant Supervised is already installed. Exiting script.\e[0m"
+#    exit 0
+#fi
 
 # Check the distributor ID
 distributor_id=$(lsb_release -i -s)
 
-# Update package sources
-sudo apt update
-
-# Check if a package is installed
+# Function to check if a package is installed
 function is_package_installed() {
     local package_name="$1"
     dpkg -s "$package_name" 2>/dev/null | grep -q "Status: install ok installed"
 }
 
-# Install systemd-resolved only if not installed
-if ! is_package_installed "systemd-resolved"; then
-    echo -e "\e[1;32mInstalling systemd-resolved...\e[0m"
-    sudo apt install "systemd-resolved" -y
-fi
-
-# Configure systemd-resolved to use Google DNS servers
-echo -e "\e[1;32mConfiguring systemd-resolved to use Google DNS servers...\e[0m"
-echo -e "[Resolve]\nDNS=8.8.8.8 8.8.4.4\n" | sudo tee /etc/systemd/resolved.conf > /dev/null
-
-# Restart systemd-resolved for changes to take effect
-sudo systemctl restart systemd-resolved
-
-# Wait for a few seconds before testing DNS connectivity
-echo -e "\e[1;33mWaiting for systemd-resolved to apply DNS settings...\e[0m"
-sleep 5
-
-# Test DNS connectivity
-if ping -q -c 1 google.com > /dev/null; then
-    echo -e "\e[1;32mDNS test successful. Continuing with the script...\e[0m"
-else
-    echo -e "\e[1;31mDNS test failed. Exiting the script. Please configure the dns.\e[0m"
-    exit 1
-fi
 
 # List of packages to install
 packages=("apparmor" "cifs-utils" "curl" "dbus" "jq" "libglib2.0-bin" "lsb-release" "network-manager" "nfs-common" "udisks2" "wget" "systemd-journal-remote")
@@ -181,9 +154,26 @@ sudo dpkg -i $PACKAGE_NAME
 echo -e "\e[1;32mDownloading Home Assistant Supervised...\e[0m"
 wget -O homeassistant-supervised.deb https://github.com/home-assistant/supervised-installer/releases/latest/download/homeassistant-supervised.deb
 
+# Extract control.tar.xz
+echo -e "\e[1;32mExtract control.tar.xz...\e[0m"
+sudo ar x homeassistant-supervised.deb
+sudo tar xf control.tar.xz
+
+# Edit control file to remove systemd-resolved dependency
+echo -e "\e[1;32mEdit control file to remove systemd-resolved dependency...\e[0m"
+sed -i '/Depends:.*systemd-resolved/d' control
+
+# Recreate control.tar.xz
+echo -e "\e[1;32mRecreate control.tar.xz...\e[0m"
+sudo tar cfJ control.tar.xz postrm postinst preinst control templates
+
+# Recreate the .deb package
+echo -e "\e[1;32mRecreate the .deb package...\e[0m"
+sudo ar rcs homeassistant-supervised.deb debian-binary control.tar.xz data.tar.xz
+
 # Install Home Assistant Supervised
 echo -e "\e[1;32mInstalling Home Assistant Supervised...\e[0m"
-sudo BYPASS_OS_CHECK=true dpkg -i --ignore-depends=systemd-resolved ./homeassistant-supervised.deb
+sudo BYPASS_OS_CHECK=true dpkg -i ./homeassistant-supervised.deb
 
 # Set the initial delay time
 initial_delay=300  # 5 minutes in seconds
@@ -219,13 +209,16 @@ else
     sudo mkdir -p /usr/share/hassio/tmp/homeassistant_pulse
 fi
 
-
 # Clean up downloaded files
 echo "Cleaning up downloaded files..."
-rm -f "$PACKAGE_NAME" "./homeassistant-supervised.deb"
+rm -f "$PACKAGE_NAME" "./homeassistant-supervised.deb" "control" "data.tar.xz" "control.tar.xz"
+
 
 echo -e "\e[1;33mHome Assistant installation completed successfully!\e[0m\n"
-echo -e "\e[1;32mOpen the link: \e[0m\e[1;92mhttp://$(hostname -I | cut -d' ' -f1):8123\e[0m\n"
+echo -e "\e[1;34mA system reboot will be performed to apply the changes.\e[0m\n"
+echo -e "\e[1;32mAfter of Reboot Open the link: \e[0m\e[1;92mhttp://$(hostname -I | cut -d' ' -f1):8123\e[0m\n"
 echo -e "\e[1;31mIf you see 'This site can’t be reached,' please check again after 5 minutes.\e[0m\n"
 
+# Reboot System
+sudo reboot
 

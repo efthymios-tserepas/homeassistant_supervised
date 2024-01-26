@@ -37,4 +37,6 @@ Feel free to contribute, report issues, or suggest improvements. For more inform
 To install Home Assistant Supervised with the default settings, run the following command:
 
 ```bash
+
 sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh)"
+

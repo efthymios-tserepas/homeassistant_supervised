@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check for sudo
+if [ "$EUID" -ne 0 ]; then
+    echo -e "\e[1;31mPlease run this script with sudo: sudo $0\e[0m"
+    exit 1
+fi
+
 # Check if Home Assistant Supervised is already installed
 if [ -d "/usr/share/hassio" ]; then
     echo -e "\e[1;31mHome Assistant Supervised is already installed. Exiting script.\e[0m"

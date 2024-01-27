@@ -1,12 +1,13 @@
 # Home Assistant Supervised Installer
 
-This repository contains a Bash script for installing Home Assistant Supervised on Debian, Ubuntu, and Raspberry Pi OS (32-bit and 64-bit) systems. Home Assistant Supervised is a version of Home Assistant that runs in a Docker container, providing a more flexible installation option.
+This repository contains a Bash script for installing Home Assistant Supervised on Debian, Ubuntu, Mint and Raspberry Pi OS (32-bit and 64-bit) systems. Home Assistant Supervised is a version of Home Assistant that runs in a Docker container, providing a more flexible installation option.
 
 ## Supported Systems
 
 The script has been successfully tested on the following systems:
 - Debian
 - Ubuntu
+- Mint
 - Raspberry Pi OS (32-bit and 64-bit)
 
 # Features
@@ -24,7 +25,7 @@ The script has been successfully tested on the following systems:
 
 - Automatic Troubleshooting: The script checks for potential dependency issues and attempts to fix them automatically, ensuring a robust installation process.
 
-- Cross-Platform Compatibility: Successfully tested on Debian, Ubuntu, and Raspberry Pi OS (32-bit and 64-bit) systems.
+- Cross-Platform Compatibility: Successfully tested on Debian, Ubuntu, Mint and Raspberry Pi OS (32-bit and 64-bit) systems.
 
 ## Important Note
 

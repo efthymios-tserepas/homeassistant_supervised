@@ -15,6 +15,11 @@ fi
 # Check the distributor ID
 distributor_id=$(lsb_release -i -s)
 
+# Check if distributor_id is LinuxMint, then change it to Ubuntu
+if [ "$distributor_id" = "Linuxmint" ]; then
+    distributor_id="Ubuntu"
+fi
+
 # Function to check if a package is installed
 function is_package_installed() {
     local package_name="$1"

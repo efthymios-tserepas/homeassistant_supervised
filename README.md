@@ -1,5 +1,7 @@
 # Home Assistant Supervised Installer
 
+Home Assistant is free and open-source software for home automation designed to be an Internet of things ecosystem-independent integration platform and central control system for smart home devices, with a focus on local control and privacy.
+
 This repository contains a Bash script for installing Home Assistant Supervised on Debian, Ubuntu, Mint and Raspberry Pi OS (32-bit and 64-bit) systems. Home Assistant Supervised is a version of Home Assistant that runs in a Docker container, providing a more flexible installation option.
 
 ## Supported Systems

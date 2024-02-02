@@ -29,6 +29,19 @@ if [ -e "$SERVICE_FILE" ]; then
     echo "The service file was created successfully: $SERVICE_FILE"
 else
     echo "There was an issue creating the service file."
+    exit 1
+fi
+
+# Start and enable the service
+sudo systemctl start stop_hassio_audio
+sudo systemctl enable stop_hassio_audio
+
+# Verify that the service is running
+if sudo systemctl is-active --quiet stop_hassio_audio; then
+    echo "The service was started and enabled successfully."
+else
+    echo "There was an issue starting or enabling the service."
+    exit 1
 fi
 
 sudo reboot

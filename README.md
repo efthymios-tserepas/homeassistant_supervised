@@ -43,3 +43,16 @@ To install Home Assistant Supervised with the default settings, run the followin
 
 sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/ha.sh)"
 
+```
+
+## Potential Issues and Solutions
+
+- If you encounter sound issues on Ubuntu after installation, you can resolve them by following these steps:
+
+1. Settings --> Addon's --> ADD-ON-STORE --> Menu (up right) --> Repositories --> https://github.com/OPHoperHPO/hassio-addons (add)
+
+2. Install Alsa & PulseAudio Fix
+
+3. Start and Start on boot
+
+

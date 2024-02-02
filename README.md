@@ -49,6 +49,13 @@ sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/ho
 
 3. Start and Start on boot
 
+- On a Raspberry Pi with an older version like Raspbian 10, if you encounter audio issues after installation, run the following command:
+
+```bash
+
+sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/homeassistant_supervised/main/stop_hassio_sound.sh)"
+
+```
 
 ## Important Note
 

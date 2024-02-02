@@ -29,12 +29,6 @@ The script has been successfully tested on the following systems:
 
 - Cross-Platform Compatibility: Successfully tested on Debian, Ubuntu, Mint and Raspberry Pi OS (32-bit and 64-bit) systems.
 
-## Important Note
-
-- This script is intended for systems compatible with Home Assistant Supervised and may not work on all environments.
-
-Feel free to contribute, report issues, or suggest improvements. For more information on Home Assistant, visit [Home Assistant Official Website](https://www.home-assistant.io/).
-
 ## Install
 
 To install Home Assistant Supervised with the default settings, run the following command:
@@ -56,3 +50,8 @@ sudo bash -c "$(curl -o- https://raw.githubusercontent.com/efthymios-tserepas/ho
 3. Start and Start on boot
 
 
+## Important Note
+
+- This script is intended for systems compatible with Home Assistant Supervised and may not work on all environments.
+
+Feel free to contribute, report issues, or suggest improvements. For more information on Home Assistant, visit [Home Assistant Official Website](https://www.home-assistant.io/).

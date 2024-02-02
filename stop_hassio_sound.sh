@@ -31,3 +31,4 @@ else
     echo "There was an issue creating the service file."
 fi
 
+sudo reboot

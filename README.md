@@ -29,7 +29,7 @@ The script has been successfully tested on the following systems:
 
 - Cross-Platform Compatibility: Successfully tested on Debian, Ubuntu, Mint and Raspberry Pi OS (32-bit and 64-bit) systems.
 
-## Install
+# Install
 
 To install Home Assistant Supervised with the default settings, run the following command:
 

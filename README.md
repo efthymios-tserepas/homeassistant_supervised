@@ -36,6 +36,7 @@ Run the following command in your terminal to download and execute the `ha.sh` s
 ```bash
 sudo bash -c "$(curl -o- https://github.com/efthymios-tserepas/homeassistant_supervised/releases/download/ha_v1.2/ha_v1-2.sh)"
 
+```
 
 ## Potential Issues and Solutions
 
